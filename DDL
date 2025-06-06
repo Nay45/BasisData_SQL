@@ -1,0 +1,71 @@
+-- ===================
+-- BUAT DATABASE
+-- ===================
+CREATE DATABASE cafe_utaratie;
+
+-- ===================
+-- TABEL SUPPLIER
+-- ===================
+CREATE TABLE Supplier (
+    supplier_id INT PRIMARY KEY AUTO_INCREMENT,
+    nama_perusahaan VARCHAR(100),
+    alamat TEXT,
+    nomor_kontak VARCHAR(20)
+);
+
+-- ===================
+-- TABEL BARANG
+-- ===================
+CREATE TABLE Barang (
+    barang_id INT PRIMARY KEY AUTO_INCREMENT,
+    nama_produk VARCHAR(100),
+    jumlah_stok INT
+);
+
+-- ===================
+-- TABEL PEMBELIAN
+-- ===================
+CREATE TABLE Pembelian (
+    pembelian_id INT PRIMARY KEY AUTO_INCREMENT,
+    supplier_id INT,
+    tanggal_pembelian DATE,
+    FOREIGN KEY (supplier_id) REFERENCES Supplier(supplier_id)
+);
+
+-- ===================
+-- TABEL DETAIL PEMBELIAN
+-- ===================
+CREATE TABLE Detail_Pembelian (
+    detail_pembelian_id INT PRIMARY KEY AUTO_INCREMENT,
+    pembelian_id INT,
+    barang_id INT,
+    jumlah INT,
+    harga_satuan INT,
+    total_harga_barang INT,
+    FOREIGN KEY (pembelian_id) REFERENCES Pembelian(pembelian_id),
+    FOREIGN KEY (barang_id) REFERENCES Barang(barang_id)
+);
+
+-- ===================
+-- TABEL PEMBAYARAN
+-- ===================
+CREATE TABLE Pembayaran (
+    pembayaran_id INT PRIMARY KEY AUTO_INCREMENT,
+    pembelian_id INT,
+    tanggal_pembayaran DATE,
+    metode_pembayaran VARCHAR(50),
+    jumlah_dibayarkan INT,
+    status_pembayaran VARCHAR(50),
+    FOREIGN KEY (pembelian_id) REFERENCES Pembelian(pembelian_id)
+);
+
+-- ===================
+-- TABEL DETAIL SUPPLIER
+-- ===================
+CREATE TABLE Detail_Supplier (
+    detail_supplier_id INT PRIMARY KEY AUTO_INCREMENT,
+    supplier_id INT,
+    barang_id INT,
+    FOREIGN KEY (supplier_id) REFERENCES Supplier(supplier_id),
+    FOREIGN KEY (barang_id) REFERENCES Barang(barang_id)
+);
