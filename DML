@@ -235,19 +235,12 @@ INSERT INTO Detail_Supplier (supplier_id, barang_id) VALUES
 -- ===================
 UPDATE Pembayaran p
 JOIN (
-    SELECT
-        p_total.pembelian_id
-    FROM
-        (SELECT pembelian_id, SUM(jumlah_dibayarkan) AS total_dibayarkan
-         FROM Pembayaran
-         GROUP BY pembelian_id) AS p_total
-    JOIN
-        (SELECT pembelian_id, SUM(total_harga_barang) AS total_harga_barang
-         FROM Detail_Pembelian
-         GROUP BY pembelian_id) AS dp_total
+    SELECT p_total.pembelian_id
+    FROM (SELECT pembelian_id, SUM(jumlah_dibayarkan) AS total_dibayarkan FROM Pembayaran GROUP BY pembelian_id) AS p_total
+    JOIN (SELECT pembelian_id, SUM(total_harga_barang) AS total_harga_barang FROM Detail_Pembelian GROUP BY pembelian_id) AS dp_total
     ON p_total.pembelian_id = dp_total.pembelian_id
     WHERE p_total.total_dibayarkan = dp_total.total_harga_barang
 ) AS lunas
 ON p.pembelian_id = lunas.pembelian_id
-SET p.status_pembayaran = 'lunas';
-WHERE p.status_pembayaran != 'lunas'
+SET p.status_pembayaran = 'lunas'
+WHERE p.status_pembayaran != 'lunas';
